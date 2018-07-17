@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     var rankOfLangs = makeRankOfLangs(langs)
 
                     var lv = findViewById<ListView>(R.id.listView)
-                    lv.adapter = LanguageAdapter(context, rankOfLangs)
+                    lv.adapter = LanguageAdapter(context, rankOfLangs, langs.count())
                     Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
                 } catch (e: FileNotFoundException) {
                     Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
