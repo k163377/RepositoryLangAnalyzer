@@ -1,6 +1,7 @@
 package com.wrongwrong.repositorylanganalyzer
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.NetworkOnMainThreadException
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
+import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getDescriptionFromJSON
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getLanguagesFromJSON
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
 import kotlinx.coroutines.experimental.android.UI
@@ -17,6 +19,9 @@ import java.io.FileNotFoundException
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+    lateinit var reps: ArrayList<String>
+    lateinit var langs: ArrayList<String>
+    lateinit var descriptions: ArrayList<String>
 
     //ボタン押したときの挙動設定
     private fun initButton(){
@@ -34,7 +39,9 @@ class MainActivity : AppCompatActivity() {
             launch(UI) {
                 try {
                     var json = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await()
-                    var langs = getLanguagesFromJSON(json)
+                    reps = GitHubUtil.getRepsFromJSON(json)
+                    langs = getLanguagesFromJSON(json)
+                    descriptions = getDescriptionFromJSON(json)
 
                     if(langs.count() != 0) {
                         var rankOfLangs = makeRankOfLangs(langs)
@@ -59,6 +66,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initButton()
-
+        findViewById<ListView>(R.id.listView).setOnItemClickListener{parent, v, position, id ->
+            var intent = Intent(this.applicationContext, RepositoryActivity::class.java)
+            intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
+            intent.putExtra("repositories", reps)
+            intent.putExtra("languages", langs)
+            intent.putExtra("descriptions", descriptions)
+            startActivity(intent)
+        }
     }
 }
