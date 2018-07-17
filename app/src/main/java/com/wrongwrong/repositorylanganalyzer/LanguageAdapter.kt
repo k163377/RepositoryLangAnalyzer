@@ -1,6 +1,7 @@
 package com.wrongwrong.repositorylanganalyzer
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,10 @@ class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>) : B
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = layoutInflater.inflate(R.layout.language_item, parent, false)
-        view.findViewById<TextView>(R.id.num).setText("${list[position].first}")
-        view.findViewById<TextView>(R.id.language).setText("${list[position].second}")
+        view.findViewById<TextView>(R.id.num).text = "${list[position].second}"
+        view.findViewById<TextView>(R.id.language).text = list[position].first
+
+        Log.d("${Log.DEBUG}", "ListCount${list.count()}")
 
         return view
     }

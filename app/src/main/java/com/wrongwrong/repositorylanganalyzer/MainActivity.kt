@@ -34,9 +34,12 @@ class MainActivity : AppCompatActivity() {
                     //var reps = getRepsFromJSON(json)
                     var langs = getLanguagesFromJSON(json)
                     var rankOfLangs = makeRankOfLangs(langs)
+
+                    Toast.makeText(context, rankOfLangs.toString(), Toast.LENGTH_SHORT).show()
+
                     var lv = findViewById<ListView>(R.id.listView)
                     lv.adapter = LanguageAdapter(context, rankOfLangs)
-                    Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
                 } catch (e: FileNotFoundException) {
                     Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
                 } catch (e: NetworkOnMainThreadException) {
