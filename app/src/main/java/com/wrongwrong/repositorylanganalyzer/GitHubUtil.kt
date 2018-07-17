@@ -2,6 +2,8 @@ package com.wrongwrong.repositorylanganalyzer
 
 import android.os.Build
 import android.support.annotation.RequiresApi
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
@@ -10,13 +12,13 @@ class GitHubUtil {
     companion object {
         // API叩いてJSON取得
         @RequiresApi(Build.VERSION_CODES.N)
-        fun getJsonFromURL(url: URL): String {
+        fun getJsonFromURL(url: URL) = async(CommonPool) {
             var resultJson = ""
             val br = BufferedReader(InputStreamReader( url.openStream() ))
 
             for(line in br.lines()) resultJson += line
 
-            return resultJson
+            return@async resultJson
         }
 
         // リポジトリ一覧をJSONから取得

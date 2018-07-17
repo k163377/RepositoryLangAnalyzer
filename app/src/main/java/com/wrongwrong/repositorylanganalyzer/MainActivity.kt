@@ -1,15 +1,12 @@
 package com.wrongwrong.repositorylanganalyzer
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.NetworkOnMainThreadException
 import android.widget.Button
 import android.widget.Toast
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
 import java.io.FileNotFoundException
 import java.net.URL
 
@@ -23,11 +20,12 @@ class MainActivity : AppCompatActivity() {
         b.setOnClickListener {
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
             try{
+                var context = this
                 b.isEnabled = false
-                var a = async{
-                    GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/k163377/repos"))
-                }.await()
-                Toast.makeText(this, "正常終了", Toast.LENGTH_LONG).show()
+                val launch = launch(UI) {
+                    var json = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/k163377/repos"))
+                    Toast.makeText(context, json.await(), Toast.LENGTH_LONG).show()
+                }
             }catch (e: FileNotFoundException){
                 Toast.makeText(this, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
             }catch (e: NetworkOnMainThreadException){
