@@ -27,15 +27,13 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
             var context = this
             b.isEnabled = false
-            val launch = launch(UI) {
+            launch(UI) {
                 try {
                     var json = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await()
 
                     //var reps = getRepsFromJSON(json)
                     var langs = getLanguagesFromJSON(json)
                     var rankOfLangs = makeRankOfLangs(langs)
-
-                    Toast.makeText(context, rankOfLangs.toString(), Toast.LENGTH_SHORT).show()
 
                     var lv = findViewById<ListView>(R.id.listView)
                     lv.adapter = LanguageAdapter(context, rankOfLangs)
@@ -48,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                     b.isEnabled = true
                 }
             }
+
         }
     }
 }
