@@ -29,9 +29,6 @@ class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>) : B
         var view = layoutInflater.inflate(R.layout.language_item, parent, false)
         view.findViewById<TextView>(R.id.num).text = "${list[position].second}"
         view.findViewById<TextView>(R.id.language).text = list[position].first
-
-        Log.d("${Log.DEBUG}", "ListCount${list.count()}")
-
         return view
     }
 }
