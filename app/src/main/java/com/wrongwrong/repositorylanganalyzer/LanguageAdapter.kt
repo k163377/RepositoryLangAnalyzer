@@ -27,7 +27,7 @@ class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>) : B
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = layoutInflater.inflate(R.layout.language_item, parent, false)
         view.findViewById<TextView>(R.id.num).setText("${list[position].first}")
-        view.findViewById<TextView>(R.id.language).setText(list[position].second)
+        view.findViewById<TextView>(R.id.language).setText("${list[position].second}")
 
         return view
     }
