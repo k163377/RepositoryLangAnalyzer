@@ -3,15 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title_language"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorWhite"
-        android:textSize="40sp"
-        android:text="Language"/>
-
     <ListView
         android:id="@+id/repository_list"
         android:layout_width="match_parent"
