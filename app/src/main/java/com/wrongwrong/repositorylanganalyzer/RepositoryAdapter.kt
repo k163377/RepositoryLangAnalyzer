@@ -1,7 +1,6 @@
 package com.wrongwrong.repositorylanganalyzer
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ class RepositoryAdapter (context: Context,
     var repDescPairs = ArrayList<Pair<String, String>>()
 
     init {
-        (0..repositories.count()-1).forEach { i -> if(language.equals(languages[i])) repDescPairs.add(Pair(repositories[i], descriptions[i])) }
+        (0 until repositories.count()).forEach { i -> if(language.equals(languages[i])) repDescPairs.add(Pair(repositories[i], descriptions[i])) }
     }
 
     override fun getCount(): Int {
