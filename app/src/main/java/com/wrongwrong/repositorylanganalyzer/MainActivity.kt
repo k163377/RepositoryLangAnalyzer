@@ -1,18 +1,15 @@
 package com.wrongwrong.repositorylanganalyzer
 
 import android.content.Context
-import android.inputmethodservice.InputMethodService
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.NetworkOnMainThreadException
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getLanguagesFromJSON
-import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getRepsFromJSON
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -30,10 +27,7 @@ class MainActivity : AppCompatActivity() {
         var b = findViewById<Button>(R.id.launchButton)
         b.setOnClickListener {
             var imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            imm.hideSoftInputFromInputMethod(
-                    input.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS
-            )
+            if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
             var context = this
