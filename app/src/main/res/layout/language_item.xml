@@ -12,7 +12,7 @@
         android:textSize="30sp"
         android:textColor="@color/colorWhite"
         android:gravity="center"
-        android:text="num"/>
+        android:text="99"/>
 
     <TextView
         android:id="@+id/language"
@@ -29,6 +29,6 @@
         android:layout_weight="3"
         android:textSize="30sp"
         android:gravity="right"
-        android:text="%"/>
+        android:text="nnn.nn%"/>
 
 </LinearLayout>
