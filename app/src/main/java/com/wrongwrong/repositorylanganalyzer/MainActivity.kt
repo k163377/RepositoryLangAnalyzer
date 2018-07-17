@@ -18,12 +18,9 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+    //ボタン押したときの挙動設定
+    private fun initButton(){
         var input = findViewById<EditText>(R.id.inputAccount)
-
         var b = findViewById<Button>(R.id.launchButton)
         b.setOnClickListener {
             //キーボードの非表示
@@ -55,5 +52,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        initButton()
+
     }
 }
