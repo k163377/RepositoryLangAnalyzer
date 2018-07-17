@@ -1,8 +1,12 @@
 package com.wrongwrong.repositorylanganalyzer
 
+import android.content.Context
+import android.inputmethodservice.InputMethodService
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.NetworkOnMainThreadException
+import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
@@ -22,6 +26,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var input = findViewById<EditText>(R.id.inputAccount)
+        input.setOnFocusChangeListener { view, hasFocus ->
+            Log.d("D", "OnFocusChange")
+            if(!hasFocus){
+                var imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                imm.hideSoftInputFromInputMethod(
+                        view.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
+        }
+
         var b = findViewById<Button>(R.id.launchButton)
         b.setOnClickListener {
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
@@ -37,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
                     var lv = findViewById<ListView>(R.id.listView)
                     lv.adapter = LanguageAdapter(context, rankOfLangs)
-                    //Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
                 } catch (e: FileNotFoundException) {
                     Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
                 } catch (e: NetworkOnMainThreadException) {
@@ -46,7 +61,6 @@ class MainActivity : AppCompatActivity() {
                     b.isEnabled = true
                 }
             }
-
         }
     }
 }
