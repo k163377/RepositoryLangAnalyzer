@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,7 +20,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:scrollHorizontally="true"
-                android:layout_weight="8"/>
+                android:layout_weight="8"
+                tools:ignore="LabelFor" />
 
             <Button
                 android:id="@+id/launchButton"
@@ -33,7 +34,8 @@
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:ignore="NestedScrolling">
         </ListView>
     </LinearLayout>
 
