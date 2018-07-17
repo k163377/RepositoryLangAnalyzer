@@ -19,7 +19,7 @@ class RepositoryAdapter (context: Context,
 
     init {
         var arr = ArrayList<Pair<String, String>>()
-        (0..repositories.count()).forEach { i -> if(language.equals(languages[i])) arr.add(Pair(repositories[i], descriptions[i])) }
+        (0..repositories.count()-1).forEach { i -> if(language.equals(languages[i])) arr.add(Pair(repositories[i], descriptions[i])) }
     }
 
     override fun getCount(): Int {
