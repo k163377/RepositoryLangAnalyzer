@@ -80,7 +80,7 @@ class GitHubUtil {
         fun makeRankOfLangs(langs:  ArrayList<String>): List<Pair<String, Int>>{
             var map = HashMap<String, Int>()
             for(lang in langs){
-                if(map.contains(lang)) map.set(lang, map.get(lang)!! +1)
+                if(map.contains(lang)) map[lang] = map[lang]!! +1
                 else map.set(lang, 1)
             }
             return map.toList().sortedByDescending { pair -> pair.second }
