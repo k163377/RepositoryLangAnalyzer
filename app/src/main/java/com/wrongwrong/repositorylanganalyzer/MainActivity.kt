@@ -26,33 +26,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var input = findViewById<EditText>(R.id.inputAccount)
-        input.setOnFocusChangeListener { view, hasFocus ->
-            Log.d("D", "OnFocusChange")
-            if(!hasFocus){
-                var imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                imm.hideSoftInputFromInputMethod(
-                        view.windowToken,
-                        InputMethodManager.HIDE_NOT_ALWAYS
-                )
-            }
-        }
 
         var b = findViewById<Button>(R.id.launchButton)
         b.setOnClickListener {
+            var imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            imm.hideSoftInputFromInputMethod(
+                    input.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+            )
+
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
             var context = this
             b.isEnabled = false
             launch(UI) {
                 try {
                     var json = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await()
-
-                    //var reps = getRepsFromJSON(json)
                     var langs = getLanguagesFromJSON(json)
-                    var rankOfLangs = makeRankOfLangs(langs)
 
-                    var lv = findViewById<ListView>(R.id.listView)
-                    lv.adapter = LanguageAdapter(context, rankOfLangs, langs.count())
-                    Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
+                    if(langs.count() != 0) {
+                        var rankOfLangs = makeRankOfLangs(langs)
+
+                        var lv = findViewById<ListView>(R.id.listView)
+                        lv.adapter = LanguageAdapter(context, rankOfLangs, langs.count())
+                        Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(context, "リポジトリを取得できませんでした。", Toast.LENGTH_SHORT).show()
                 } catch (e: FileNotFoundException) {
                     Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
                 } catch (e: NetworkOnMainThreadException) {
