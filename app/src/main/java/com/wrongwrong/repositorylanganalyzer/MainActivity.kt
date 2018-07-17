@@ -26,11 +26,13 @@ class MainActivity : AppCompatActivity() {
 
         var b = findViewById<Button>(R.id.launchButton)
         b.setOnClickListener {
+            //キーボードの非表示
             var imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
             var context = this
+            //ボタンを無効化しjson取得など
             b.isEnabled = false
             launch(UI) {
                 try {
