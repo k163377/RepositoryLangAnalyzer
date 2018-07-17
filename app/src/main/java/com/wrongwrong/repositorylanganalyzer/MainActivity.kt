@@ -10,8 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
-import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getDescriptionFromJSON
-import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getLanguagesFromJSON
+import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getValuesFromSplittedJson
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -38,10 +37,11 @@ class MainActivity : AppCompatActivity() {
             b.isEnabled = false
             launch(UI) {
                 try {
-                    var json = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await()
-                    reps = GitHubUtil.getRepsFromJSON(json)
-                    langs = getLanguagesFromJSON(json)
-                    descriptions = getDescriptionFromJSON(json)
+                    var jsonArr = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await().split(",\"")
+                    reps = getValuesFromSplittedJson(jsonArr, "full_name\":")
+                    langs = getValuesFromSplittedJson(jsonArr, "language\":")
+                    for(i in 0 until langs.count()) if(langs[i] == "null") langs[i] = "Other Language"
+                    descriptions = getValuesFromSplittedJson(jsonArr, "description\":")
 
                     if(langs.count() != 0) {
                         var rankOfLangs = makeRankOfLangs(langs)

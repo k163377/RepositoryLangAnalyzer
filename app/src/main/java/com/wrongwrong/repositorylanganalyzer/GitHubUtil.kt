@@ -21,7 +21,25 @@ class GitHubUtil {
             return@async resultJson
         }
 
-        // リポジトリ一覧をJSONから取得
+        //入力は,"で分割された前提
+        fun getValuesFromSplittedJson(arr: List<String>, value: String): ArrayList<String>{
+            var regex = Regex("(?<!.)$value.+")
+            var array = ArrayList<String>()
+            var result: MatchResult?
+            var temp: String
+
+            for(str in arr){
+                result = regex.find(str)
+                if(result != null){
+                    temp = result.value.substring(value.length)
+                    if(temp != "null") temp = temp.substring(0, temp.length-1).substring(1)
+                    array.add(temp)
+                }
+            }
+            return array
+        }
+
+        /*// リポジトリ一覧をJSONから取得
         fun getRepsFromJSON(json: String): ArrayList<String>{
             val full_name = "full_name\":\""
 
@@ -74,7 +92,7 @@ class GitHubUtil {
                 }
             }
             return languages
-        }
+        }*/
 
         //言語の項の列から、どの言語がどの順で多いかをソート済みリストとして返す
         fun makeRankOfLangs(langs:  ArrayList<String>): List<Pair<String, Int>>{
