@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.NetworkOnMainThreadException
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -12,9 +13,14 @@ import android.widget.ListView
 import android.widget.Toast
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.getValuesFromSplittedJson
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
@@ -57,8 +63,31 @@ class MainActivity : AppCompatActivity() {
                 } finally {
                     b.isEnabled = true
                 }
+
+                test()
             }
         }
+    }
+
+    fun test(){
+        var reposCall = getReposCall("k163377")
+        var arr: List<Repo>?
+        reposCall.enqueue(object : Callback<List<Repo>> {
+            override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
+                try{
+                    arr = response!!.body()
+                    for(repo in arr!!) Log.d("Repos", repo.full_name)
+                    // Log.d("onResponse", arr!![0].full_name)
+                }catch (e: IOException){
+                    Log.d("onResponse", "IOException")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
+                Log.d("onFailure", "")
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
