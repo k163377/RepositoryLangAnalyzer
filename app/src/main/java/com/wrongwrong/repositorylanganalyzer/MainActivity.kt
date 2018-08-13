@@ -2,9 +2,11 @@ package com.wrongwrong.repositorylanganalyzer
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.NetworkOnMainThreadException
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -72,6 +74,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 
         initButton()
         findViewById<ListView>(R.id.listView).setOnItemClickListener{parent, v, position, id ->
