@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
             //処理開始通知のトースト表示
-            Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Start.", Toast.LENGTH_LONG).show()
             val context = this
             //ボタンを無効化しjson取得など
             b.isEnabled = false
@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
                             lv.adapter = LanguageAdapter(context, rankOfLangs, arr.count())
                             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Couldn't find any repositories.\n" +
+                                    "The spelling is wrong or the public repository does not exist.", Toast.LENGTH_LONG).show()
                         }
                     }catch (e: IOException) {
                         Log.d("onResponse", "IOException")
@@ -59,36 +60,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
-                    Log.d("onFailure", "")
+                    Toast.makeText(context, "Network communication failed.\nPlease check the communication status.", Toast.LENGTH_LONG).show()
                     b.isEnabled = true
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
             })
-            /*launch(UI) {
-                try {
-                    var jsonArr = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await().split(",\"")
-                    reps = getValuesFromSplittedJson(jsonArr, "full_name\":")
-                    langs = getValuesFromSplittedJson(jsonArr, "language\":")
-                    for(i in 0 until langs.count()) if(langs[i] == "null") langs[i] = "Other Language"
-                    descriptions = getValuesFromSplittedJson(jsonArr, "description\":")
-
-                    if(langs.count() != 0) {
-                        var rankOfLangs = makeRankOfLangs(langs)
-
-                        var lv = findViewById<ListView>(R.id.listView)
-                        lv.adapter = LanguageAdapter(context, rankOfLangs, langs.count())
-                        Toast.makeText(context, "正常に取得を完了しました。", Toast.LENGTH_SHORT).show()
-                    } else Toast.makeText(context, "リポジトリを取得できませんでした。", Toast.LENGTH_SHORT).show()
-                } catch (e: FileNotFoundException) {
-                    Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
-                } catch (e: NetworkOnMainThreadException) {
-                    Toast.makeText(context, "ネットワークに接続できませんでした。", Toast.LENGTH_SHORT).show()
-                } finally {
-                    b.isEnabled = true
-                }
-
-                test()
-            }*/
         }
     }
 
