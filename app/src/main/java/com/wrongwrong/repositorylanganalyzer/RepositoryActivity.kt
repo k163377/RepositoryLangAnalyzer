@@ -22,7 +22,7 @@ class RepositoryActivity: AppCompatActivity() {
         title = titleLang
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
 
-        findViewById<ListView>(R.id.repository_list).setOnItemClickListener { parent, v, position, id ->
+        lv.setOnItemClickListener { parent, v, position, id ->
             val uri = Uri.parse("https://github.com/${(parent.getItemAtPosition(position) as Pair<String, String>).first}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
