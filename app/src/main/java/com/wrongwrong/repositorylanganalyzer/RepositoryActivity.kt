@@ -16,11 +16,19 @@ class RepositoryActivity: AppCompatActivity() {
 
         val titleLang = intent.getStringExtra("language")
         val lv = findViewById<ListView>(R.id.repository_list)
-        lv.adapter = RepositoryAdapter(this, titleLang, intent.extras["repositories"] as Array<Repo>)
+        val titlecolor = resources.getIdentifier(
+                titleLang.replace(' ', '_')
+                        .replace('+', '_')
+                        .replace('#', '_')
+                        .replace('-', '_')
+                        .replace('\'', '_'),
+                "color", packageName
+        )
+        lv.adapter = RepositoryAdapter(this, titleLang, intent.extras["repositories"] as Array<Repo>, if(titlecolor == 0) R.color.colorWhite else titlecolor)
 
         //タイトルを変更
         title = titleLang
-        supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 
         lv.setOnItemClickListener { parent, v, position, id ->
             val uri = Uri.parse("https://github.com/${(parent.getItemAtPosition(position) as Pair<String, String>).first}")

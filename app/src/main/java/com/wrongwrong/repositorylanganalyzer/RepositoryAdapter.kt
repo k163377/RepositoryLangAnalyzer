@@ -2,17 +2,19 @@ package com.wrongwrong.repositorylanganalyzer
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class RepositoryAdapter (context: Context,
-                         language: String,
-                         repositories: Array<Repo>) : BaseAdapter() {
-    var cont = context
-    var layoutInflater = cont.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+class RepositoryAdapter (var context: Context,
+                         var language: String,
+                         repositories: Array<Repo>,
+                         var colorId: Int) : BaseAdapter() {
+    var layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var repDescPairs = ArrayList<Pair<String, String>>()
 
     init {
@@ -36,7 +38,10 @@ class RepositoryAdapter (context: Context,
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = layoutInflater.inflate(R.layout.repository_item, parent, false)
-        view.findViewById<TextView>(R.id.rep_name).text = repDescPairs[position].first
+        val rep_name = view.findViewById<TextView>(R.id.rep_name)
+
+        rep_name.text = repDescPairs[position].first
+        rep_name.background = ColorDrawable(ContextCompat.getColor(context, colorId))
         view.findViewById<TextView>(R.id.description).text = repDescPairs[position].second
 
         return view
