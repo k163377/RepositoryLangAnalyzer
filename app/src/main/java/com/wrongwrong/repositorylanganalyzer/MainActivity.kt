@@ -24,24 +24,48 @@ import java.io.IOException
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-    lateinit var reps: ArrayList<String>
-    lateinit var langs: ArrayList<String>
-    lateinit var descriptions: ArrayList<String>
-
     //ボタン押したときの挙動設定
     private fun initButton(){
-        var input = findViewById<EditText>(R.id.inputAccount)
-        var b = findViewById<Button>(R.id.launchButton)
+        val input = findViewById<EditText>(R.id.inputAccount)
+        val b = findViewById<Button>(R.id.launchButton)
         b.setOnClickListener {
             //キーボードの非表示
-            var imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
+            //処理開始通知のトースト表示
             Toast.makeText(this, "開始", Toast.LENGTH_LONG).show()
-            var context = this
+            val context = this
             //ボタンを無効化しjson取得など
             b.isEnabled = false
-            launch(UI) {
+
+            val reposCall = getReposCall(input.text.toString())
+            reposCall.enqueue(object : Callback<List<Repo>> {
+                override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
+                    try{
+                        val arr = response!!.body()
+                        if(arr != null && arr.isNotEmpty()){
+                            val rankOfLangs = makeRankOfLangs(arr)
+                            val lv = findViewById<ListView>(R.id.listView)
+                            lv.adapter = LanguageAdapter(context, rankOfLangs, arr.count())
+                            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "リポジトリを見つけられませんでした。ユーザー名が正しいか確認してください。", Toast.LENGTH_SHORT).show()
+                        }
+                    }catch (e: IOException) {
+                        Log.d("onResponse", "IOException")
+                    }finally {
+                        b.isEnabled = true
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
+                    Log.d("onFailure", "")
+                    b.isEnabled = true
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+            })
+            /*launch(UI) {
                 try {
                     var jsonArr = GitHubUtil.getJsonFromURL(URL("https://api.github.com/users/${input.text}/repos")).await().split(",\"")
                     reps = getValuesFromSplittedJson(jsonArr, "full_name\":")
@@ -65,29 +89,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 test()
-            }
+            }*/
         }
-    }
-
-    fun test(){
-        var reposCall = getReposCall("k163377")
-        var arr: List<Repo>?
-        reposCall.enqueue(object : Callback<List<Repo>> {
-            override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
-                try{
-                    arr = response!!.body()
-                    for(repo in arr!!) Log.d("Repos", repo.full_name)
-                    // Log.d("onResponse", arr!![0].full_name)
-                }catch (e: IOException){
-                    Log.d("onResponse", "IOException")
-                }
-            }
-
-            override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
-                Log.d("onFailure", "")
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,13 +98,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initButton()
-        findViewById<ListView>(R.id.listView).setOnItemClickListener{parent, v, position, id ->
+        /*findViewById<ListView>(R.id.listView).setOnItemClickListener{parent, v, position, id ->
             var intent = Intent(this.applicationContext, RepositoryActivity::class.java)
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
             intent.putExtra("repositories", reps)
             intent.putExtra("languages", langs)
             intent.putExtra("descriptions", descriptions)
             startActivity(intent)
-        }
+        }*/
     }
 }
