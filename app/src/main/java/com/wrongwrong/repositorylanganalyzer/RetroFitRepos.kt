@@ -18,7 +18,7 @@ fun getReposCall(id: String): Call<List<Repo>> {
     return call
 }
 
-interface IGetRepos{
+private interface IGetRepos{
     @GET("{id}/repos")
     fun getRepos(@Path("id") userID : String) : Call<List<Repo>>
 }
