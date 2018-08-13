@@ -9,6 +9,8 @@
         android:layout_height="match_parent"
         android:textColor="@color/colorWhite"
         android:textSize="30sp"
+        android:shadowColor="@color/colorBlack"
+        android:shadowRadius="10.0"
         android:text="Repository_Name"/>
 
     <TextView
