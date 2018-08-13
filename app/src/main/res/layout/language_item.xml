@@ -11,7 +11,11 @@
         android:background="@color/colorPrimary"
         android:textSize="30sp"
         android:textColor="@color/colorWhite"
+        android:shadowColor="@color/colorPrimaryDark"
         android:gravity="center"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
+        android:shadowRadius="1.5"
         android:text="99"/>
 
     <TextView
