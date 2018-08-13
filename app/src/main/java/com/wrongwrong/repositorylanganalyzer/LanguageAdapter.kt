@@ -1,5 +1,6 @@
 package com.wrongwrong.repositorylanganalyzer
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.content.ContextCompat
@@ -28,14 +29,15 @@ class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>, num
         return position.toLong()
     }
 
+    @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view = layoutInflater.inflate(R.layout.language_item, parent, false)
+        val view = layoutInflater.inflate(R.layout.language_item, parent, false)
         val numtext = view.findViewById<TextView>(R.id.num)
         numtext.text = "${list[position].second}"
         numtext.background = ColorDrawable(ContextCompat.getColor(cont, if(numColors[position] != 0) numColors[position] else R.color.colorWhite))
 
-        view.findViewById<TextView>(R.id.language).text = "${list[position].first}"
-        view.findViewById<TextView>(R.id.parcent).text = " ${String.format("%3.2f", ((list[position].second * 100).toDouble() / sumOfReps))}%"
+        view.findViewById<TextView>(R.id.language).text = list[position].first
+        view.findViewById<TextView>(R.id.parcent).text = "${String.format("%3.2f", ((list[position].second * 100).toDouble() / sumOfReps))}%"
         return view
     }
 }
