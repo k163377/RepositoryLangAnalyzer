@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class RepositoryAdapter (var context: Context,
-                         var language: String,
+class RepositoryAdapter (val context: Context,
+                         val language: String,
                          repositories: Array<Repo>,
-                         var colorId: Int) : BaseAdapter() {
+                         val colorId: Int) : BaseAdapter() {
     var layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var repDescPairs = ArrayList<Pair<String, String>>()
 
