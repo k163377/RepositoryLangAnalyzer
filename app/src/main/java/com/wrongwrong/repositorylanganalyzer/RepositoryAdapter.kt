@@ -18,7 +18,7 @@ class RepositoryAdapter (var context: Context,
     var repDescPairs = ArrayList<Pair<String, String>>()
 
     init {
-        for(repo in repositories!!)
+        for(repo in repositories)
             if(language == repo.language)
                 repDescPairs.add(Pair(repo.full_name, repo.description) as Pair<String, String>)
     }
