@@ -10,19 +10,19 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>, numOfReps: Int, numColorIds: ArrayList<Int>) : BaseAdapter() {
-    var cont = context
-    var layoutInflater = cont.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    var list = sortedList
+class LanguageAdapter(val context: Context,
+                      val sortedList: List<Pair<String, Int>>,
+                      numOfReps: Int,
+                      val numColorIds: ArrayList<Int>) : BaseAdapter() {
+    val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var sumOfReps = numOfReps.toDouble()
-    private val numColors = numColorIds
 
     override fun getCount(): Int {
-        return list.count()
+        return sortedList.count()
     }
 
     override fun getItem(position: Int): Pair<String, Int> {
-        return list[position]
+        return sortedList[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -33,11 +33,11 @@ class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>, num
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = layoutInflater.inflate(R.layout.language_item, parent, false)
         val numtext = view.findViewById<TextView>(R.id.num)
-        numtext.text = "${list[position].second}"
-        numtext.background = ColorDrawable(ContextCompat.getColor(cont, if(numColors[position] != 0) numColors[position] else R.color.colorWhite))
+        numtext.text = "${sortedList[position].second}"
+        numtext.background = ColorDrawable(ContextCompat.getColor(context, if(numColorIds[position] != 0) numColorIds[position] else R.color.colorWhite))
 
-        view.findViewById<TextView>(R.id.language).text = list[position].first
-        view.findViewById<TextView>(R.id.parcent).text = "${String.format("%3.2f", ((list[position].second * 100).toDouble() / sumOfReps))}%"
+        view.findViewById<TextView>(R.id.language).text = sortedList[position].first
+        view.findViewById<TextView>(R.id.parcent).text = "${String.format("%3.2f", ((sortedList[position].second * 100).toDouble() / sumOfReps))}%"
         return view
     }
 }
