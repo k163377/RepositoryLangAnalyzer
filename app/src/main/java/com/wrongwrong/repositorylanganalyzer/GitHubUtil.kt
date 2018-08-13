@@ -44,7 +44,18 @@ class GitHubUtil {
             var map = HashMap<String, Int>()
             for(lang in langs){
                 if(map.contains(lang)) map[lang] = map[lang]!! +1
-                else map.set(lang, 1)
+                else map[lang] = 1
+            }
+            return map.toList().sortedByDescending { pair -> pair.second }
+        }
+
+        fun makeRankOfLangs(Repos: List<Repo>?): List<Pair<String, Int>>{
+            var map = HashMap<String, Int>()
+            var temp: String
+            for(repo in Repos!!){ //nullチェックは外でやること
+                temp = if(repo.language == null) "OtherLanguage" else repo.language!! //言語にnullを入れたくないので、チェックはここでやる？
+                if(map.contains(temp)) map[temp] = map[temp]!!+1
+                else map[temp] = 1
             }
             return map.toList().sortedByDescending { pair -> pair.second }
         }
