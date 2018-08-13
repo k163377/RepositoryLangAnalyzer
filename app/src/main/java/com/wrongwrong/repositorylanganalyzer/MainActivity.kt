@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.NetworkOnMainThreadException
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -14,15 +13,10 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.FileNotFoundException
 import java.io.IOException
-import java.net.URL
 
 class MainActivity : AppCompatActivity() {
     var repositories: List<Repo>? = null
@@ -50,7 +44,20 @@ class MainActivity : AppCompatActivity() {
                         if(repositories != null && repositories!!.isNotEmpty()){
                             val rankOfLangs = makeRankOfLangs(repositories)
                             val lv = findViewById<ListView>(R.id.listView)
-                            lv.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count())
+                            val numColors = ArrayList<Int>()
+                            for(p in rankOfLangs){
+                                numColors.add(
+                                        resources.getIdentifier(
+                                                p.first.replace(' ', '_')
+                                                .replace('+', '_')
+                                                .replace('#', '_')
+                                                .replace('-', '_')
+                                                .replace('\'', '_'),
+                                                "color", packageName
+                                        )
+                                )
+                            }
+                            lv.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
                             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(context, "Couldn't find any repositories.\n" +
