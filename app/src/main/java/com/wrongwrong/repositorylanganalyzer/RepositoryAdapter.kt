@@ -1,5 +1,6 @@
 package com.wrongwrong.repositorylanganalyzer
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,15 @@ import android.widget.TextView
 
 class RepositoryAdapter (context: Context,
                          language: String,
-                         repositories: ArrayList<String>,
-                         languages: ArrayList<String>,
-                         descriptions: ArrayList<String>) : BaseAdapter() {
+                         repositories: Array<Repo>) : BaseAdapter() {
     var cont = context
     var layoutInflater = cont.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var repDescPairs = ArrayList<Pair<String, String>>()
 
     init {
-        (0 until repositories.count()).forEach { i -> if(language.equals(languages[i])) repDescPairs.add(Pair(repositories[i], descriptions[i])) }
+        for(repo in repositories!!)
+            if(language == repo.language)
+                repDescPairs.add(Pair(repo.full_name, repo.description) as Pair<String, String>)
     }
 
     override fun getCount(): Int {
@@ -32,8 +33,9 @@ class RepositoryAdapter (context: Context,
         return repDescPairs[position]
     }
 
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view = layoutInflater.inflate(R.layout.repository_item, parent, false)
+        val view = layoutInflater.inflate(R.layout.repository_item, parent, false)
         view.findViewById<TextView>(R.id.rep_name).text = repDescPairs[position].first
         view.findViewById<TextView>(R.id.description).text = repDescPairs[position].second
 

@@ -18,20 +18,18 @@ class RepositoryActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository)
 
-        var titleLang = intent.getStringExtra("language")
-        var lv = findViewById<ListView>(R.id.repository_list)
-        lv.adapter = RepositoryAdapter(this, titleLang, intent.extras["repositories"] as ArrayList<String>,
-                intent.extras["languages"] as ArrayList<String>, intent.extras["descriptions"] as ArrayList<String>)
+        val titleLang = intent.getStringExtra("language")
+        val lv = findViewById<ListView>(R.id.repository_list)
+        lv.adapter = RepositoryAdapter(this, titleLang, intent.extras["repositories"] as Array<Repo>)
 
         //タイトルを変更
         title = titleLang
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
 
         findViewById<ListView>(R.id.repository_list).setOnItemClickListener { parent, v, position, id ->
-            var uri = Uri.parse("https://github.com/${(parent.getItemAtPosition(position) as Pair<String, String>).first}")
-            var intent = Intent(Intent.ACTION_VIEW, uri)
+            val uri = Uri.parse("https://github.com/${(parent.getItemAtPosition(position) as Pair<String, String>).first}")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
-            //Log.d("url", "$uri")
         }
     }
 }

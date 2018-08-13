@@ -23,6 +23,8 @@ import java.io.IOException
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+    var repositories: List<Repo>? = null
+
     //ボタン押したときの挙動設定
     private fun initButton(){
         val input = findViewById<EditText>(R.id.inputAccount)
@@ -42,11 +44,11 @@ class MainActivity : AppCompatActivity() {
             reposCall.enqueue(object : Callback<List<Repo>> {
                 override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
                     try{
-                        val arr = response!!.body()
-                        if(arr != null && arr.isNotEmpty()){
-                            val rankOfLangs = makeRankOfLangs(arr)
+                        repositories = response!!.body()
+                        if(repositories != null && repositories!!.isNotEmpty()){
+                            val rankOfLangs = makeRankOfLangs(repositories)
                             val lv = findViewById<ListView>(R.id.listView)
-                            lv.adapter = LanguageAdapter(context, rankOfLangs, arr.count())
+                            lv.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count())
                             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(context, "Couldn't find any repositories.\n" +
@@ -72,13 +74,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initButton()
-        /*findViewById<ListView>(R.id.listView).setOnItemClickListener{parent, v, position, id ->
+        findViewById<ListView>(R.id.listView).setOnItemClickListener{parent, v, position, id ->
             var intent = Intent(this.applicationContext, RepositoryActivity::class.java)
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
-            intent.putExtra("repositories", reps)
-            intent.putExtra("languages", langs)
-            intent.putExtra("descriptions", descriptions)
+            intent.putExtra("repositories", repositories!!.toTypedArray())
             startActivity(intent)
-        }*/
+        }
     }
 }
