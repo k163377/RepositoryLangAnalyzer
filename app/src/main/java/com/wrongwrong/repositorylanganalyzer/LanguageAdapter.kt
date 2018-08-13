@@ -32,7 +32,7 @@ class LanguageAdapter(context: Context, sortedList: List<Pair<String, Int>>, num
         var view = layoutInflater.inflate(R.layout.language_item, parent, false)
         val numtext = view.findViewById<TextView>(R.id.num)
         numtext.text = "${list[position].second}"
-        numtext.background = ColorDrawable(ContextCompat.getColor(cont, numColors[position]))
+        numtext.background = ColorDrawable(ContextCompat.getColor(cont, if(numColors[position] != 0) numColors[position] else R.color.colorWhite))
 
         view.findViewById<TextView>(R.id.language).text = "${list[position].first}"
         view.findViewById<TextView>(R.id.parcent).text = " ${String.format("%3.2f", ((list[position].second * 100).toDouble() / sumOfReps))}%"
