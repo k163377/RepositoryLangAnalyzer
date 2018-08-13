@@ -8,10 +8,8 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var launchButton: Button
     lateinit var listView: ListView
     lateinit var input: EditText
+    lateinit var repSumText: TextView
 
     private fun setPartsEnabled(b: Boolean){
         this.launchButton.isEnabled = b
@@ -64,6 +63,9 @@ class MainActivity : AppCompatActivity() {
                                 )
                             }
                             listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
+                            repSumText.text = "Find ${repositories!!.count()} repositories."
+                            repSumText.visibility = View.VISIBLE
+
                             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(context, "Couldn't find any repositories.\n" +
@@ -91,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         launchButton = findViewById(R.id.launchButton)
         listView = findViewById(R.id.listView)
         input = findViewById(R.id.inputAccount)
+        repSumText = findViewById(R.id.repSumText)
 
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 

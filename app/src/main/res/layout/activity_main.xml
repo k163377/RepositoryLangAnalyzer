@@ -27,6 +27,15 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/repSumText"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:visibility="invisible"/>
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
