@@ -9,13 +9,12 @@ import retrofit2.http.Path
 
 fun getReposCall(id: String): Call<List<Repo>> {
     val gson = GsonBuilder().serializeNulls().create()
-    var retrofit: Retrofit = Retrofit.Builder()
+    val retrofit: Retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl("https://api.github.com/users/")
             .build()
-    var service = retrofit.create(IGetRepos::class.java)
-    var call = service.getRepos(id)
-    return call
+    val service = retrofit.create(IGetRepos::class.java)
+    return service.getRepos(id)
 }
 
 private interface IGetRepos{
