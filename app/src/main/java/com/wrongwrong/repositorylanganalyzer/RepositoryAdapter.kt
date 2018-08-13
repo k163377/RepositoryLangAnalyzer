@@ -39,11 +39,12 @@ class RepositoryAdapter (val context: Context,
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = layoutInflater.inflate(R.layout.repository_item, parent, false)
         val rep_name = view.findViewById<TextView>(R.id.rep_name)
-
         rep_name.text = repDescPairs[position].first
         rep_name.background = ColorDrawable(ContextCompat.getColor(context, colorId))
-        view.findViewById<TextView>(R.id.description).text = repDescPairs[position].second
 
+        val description = view.findViewById<TextView>(R.id.description)
+        description.text = repDescPairs[position].second
+        if(position % 2 == 1) description.background = ColorDrawable(ContextCompat.getColor(context, R.color.colorLightGray))
         return view
     }
 }
