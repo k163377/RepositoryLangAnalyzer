@@ -1,5 +1,6 @@
 package com.wrongwrong.repositorylanganalyzer
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         val reposCall = getReposCall(input.text.toString()) //データを取得
         reposCall.enqueue(object : Callback<List<Repo>> {
+            @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
                 try{
                     repositories = response!!.body()
