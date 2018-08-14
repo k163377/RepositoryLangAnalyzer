@@ -30,60 +30,57 @@ class MainActivity : AppCompatActivity() {
         this.input.isEnabled = b
     }
 
-    //ボタン押したときの挙動設定
-    private fun initButton(){
-        launchButton.setOnClickListener {
-            //キーボードの非表示
-            val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+    fun onClickLaunch(view: View){
+        //キーボードの非表示
+        val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+        if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
-            //パーツ類を無効化
-            setPartsEnabled(false)
+        //パーツ類を無効化
+        setPartsEnabled(false)
 
-            //処理開始通知のトースト表示
-            Toast.makeText(this, "Start.", Toast.LENGTH_LONG).show()
-            val context = this
+        //処理開始通知のトースト表示
+        Toast.makeText(this, "Start.", Toast.LENGTH_LONG).show()
+        val context = this
 
-            val reposCall = getReposCall(input.text.toString()) //データを取得
-            reposCall.enqueue(object : Callback<List<Repo>> {
-                override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
-                    try{
-                        repositories = response!!.body()
-                        if(repositories != null && repositories!!.isNotEmpty()){
-                            val rankOfLangs = makeRankOfLangs(repositories)
-                            val numColors = ArrayList<Int>()
-                            for(p in rankOfLangs){
-                                numColors.add(
-                                        resources.getIdentifier(
-                                                p.first.replace(' ', '_')
-                                                .replace('+', '_').replace('#', '_')
-                                                .replace('-', '_').replace('\'', '_'),
-                                                "color", packageName
-                                        )
-                                )
-                            }
-                            listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
-                            repSumText.text = "Find ${repositories!!.count()} repositories."
-                            repSumText.visibility = View.VISIBLE
-
-                            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(context, "Couldn't find any repositories.\n" +
-                                    "The spelling is wrong or the public repository does not exist.", Toast.LENGTH_LONG).show()
+        val reposCall = getReposCall(input.text.toString()) //データを取得
+        reposCall.enqueue(object : Callback<List<Repo>> {
+            override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
+                try{
+                    repositories = response!!.body()
+                    if(repositories != null && repositories!!.isNotEmpty()){
+                        val rankOfLangs = makeRankOfLangs(repositories)
+                        val numColors = ArrayList<Int>()
+                        for(p in rankOfLangs){
+                            numColors.add(
+                                    resources.getIdentifier(
+                                            p.first.replace(' ', '_')
+                                                    .replace('+', '_').replace('#', '_')
+                                                    .replace('-', '_').replace('\'', '_'),
+                                            "color", packageName
+                                    )
+                            )
                         }
-                    }catch (e: IOException) {
-                        Log.d("onResponse", "IOException")
-                    }finally {
-                        setPartsEnabled(true)
-                    }
-                }
+                        listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
+                        repSumText.text = "Find ${repositories!!.count()} repositories."
+                        repSumText.visibility = View.VISIBLE
 
-                override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
-                    Toast.makeText(context, "Network communication failed.\nPlease check the communication status.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Couldn't find any repositories.\n" +
+                                "The spelling is wrong or the public repository does not exist.", Toast.LENGTH_LONG).show()
+                    }
+                }catch (e: IOException) {
+                    Log.d("onResponse", "IOException")
+                }finally {
                     setPartsEnabled(true)
                 }
-            })
-        }
+            }
+
+            override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
+                Toast.makeText(context, "Network communication failed.\nPlease check the communication status.", Toast.LENGTH_LONG).show()
+                setPartsEnabled(true)
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +94,6 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 
-        initButton()
         listView.setOnItemClickListener{parent, v, position, id ->
             val intent = Intent(this.applicationContext, RepositoryActivity::class.java)
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
