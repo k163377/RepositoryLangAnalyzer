@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 
-        listView.setOnItemClickListener{parent, v, position, id ->
+        listView.setOnItemClickListener{ parent, _, position, _ ->
             val intent = Intent(this.applicationContext, RepositoryActivity::class.java)
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
             intent.putExtra("repositories", repositories!!.toTypedArray())
