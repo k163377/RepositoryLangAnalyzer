@@ -14,8 +14,8 @@ class LanguageAdapter(val context: Context,
                       val sortedList: List<Pair<String, Int>>,
                       numOfReps: Int,
                       val numColorIds: ArrayList<Int>) : BaseAdapter() {
-    val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    var sumOfReps = numOfReps.toDouble()
+    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private var sumOfReps = numOfReps.toDouble()
 
     override fun getCount(): Int {
         return sortedList.count()

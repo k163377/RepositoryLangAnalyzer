@@ -14,8 +14,8 @@ class RepositoryAdapter (val context: Context,
                          val language: String,
                          repositories: Array<Repo>,
                          val colorId: Int) : BaseAdapter() {
-    var layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    var repDescPairs = ArrayList<Pair<String, String>>()
+    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val repDescPairs = ArrayList<Pair<String, String>>()
 
     init {
         for(repo in repositories)
