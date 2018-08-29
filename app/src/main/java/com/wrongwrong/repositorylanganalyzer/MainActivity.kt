@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         setPartsEnabled(false)
 
         //処理開始通知のトースト表示
-        Toast.makeText(this, "Start.", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
         val reposCall = getReposCall(input.text.toString()) //データを取得
