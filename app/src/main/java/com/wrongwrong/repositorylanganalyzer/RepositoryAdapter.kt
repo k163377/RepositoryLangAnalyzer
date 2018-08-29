@@ -15,35 +15,35 @@ class RepositoryAdapter (val context: Context,
                          repositories: Array<Repo>,
                          val colorId: Int) : BaseAdapter() {
     var layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    var repDescPairs = ArrayList<Pair<String, String>>()
+    var selectedRepositories = ArrayList<Repo>()
 
     init {
         for(repo in repositories)
             if(language == repo.language)
-                repDescPairs.add(Pair(repo.full_name, repo.description) as Pair<String, String>)
+                selectedRepositories.add(repo)
     }
 
     override fun getCount(): Int {
-        return repDescPairs.count()
+        return selectedRepositories.count()
     }
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
-    override fun getItem(position: Int): Pair<String, String> {
-        return repDescPairs[position]
+    override fun getItem(position: Int): Repo {
+        return selectedRepositories[position]
     }
 
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = layoutInflater.inflate(R.layout.repository_item, parent, false)
         val rep_name = view.findViewById<TextView>(R.id.rep_name)
-        rep_name.text = repDescPairs[position].first
+        rep_name.text = selectedRepositories[position].full_name
         rep_name.background = ColorDrawable(ContextCompat.getColor(context, colorId))
 
         val description = view.findViewById<TextView>(R.id.description)
-        description.text = repDescPairs[position].second
+        description.text = selectedRepositories[position].description
         if(position % 2 == 1) description.background = ColorDrawable(ContextCompat.getColor(context, R.color.colorLightGray))
         return view
     }
