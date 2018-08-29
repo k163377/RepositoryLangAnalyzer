@@ -17,6 +17,7 @@
             android:inputType="text"
             android:scrollHorizontally="true"
             android:layout_weight="8"
+            android:hint="@string/inputIdHint"
             tools:ignore="LabelFor" />
 
         <Button

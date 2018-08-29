@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">RepositoryLangAnalyzer</string>
-    <string name="inputIdHint"></string>>
+    <string name="inputIdHint">GitHubのIDを入力</string>>
 </resources>
