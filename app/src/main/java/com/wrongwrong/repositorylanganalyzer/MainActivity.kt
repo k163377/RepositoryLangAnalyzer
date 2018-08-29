@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         this.input.isEnabled = b
     }
 
-    fun onClickLaunch(view: View){
+    private fun getInformations(){
         //キーボードの非表示
         val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
         if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
@@ -86,6 +86,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    fun onClickLaunch(view: View){
+        getInformations()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -102,6 +106,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
             intent.putExtra("repositories", repositories!!.toTypedArray())
             startActivity(intent)
+        }
+
+        input.setOnEditorActionListener { v, actionId, keyEvent ->
+            getInformations()
+            return@setOnEditorActionListener true
         }
     }
 }
