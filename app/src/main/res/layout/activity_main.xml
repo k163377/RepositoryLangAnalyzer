@@ -18,7 +18,7 @@
             android:scrollHorizontally="true"
             android:layout_weight="8"
             android:hint="@string/inputIdHint"
-            tools:ignore="LabelFor" />
+            tools:ignore="LabelFor"/>
 
         <Button
             android:id="@+id/launchButton"
