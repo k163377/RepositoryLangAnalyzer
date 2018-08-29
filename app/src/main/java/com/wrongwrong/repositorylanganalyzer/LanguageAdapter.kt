@@ -32,11 +32,14 @@ class LanguageAdapter(val context: Context,
     @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = layoutInflater.inflate(R.layout.language_item, parent, false)
+
+        val langText = view.findViewById<TextView>(R.id.language)
+        langText.text = sortedList[position].first
+        langText.background = ColorDrawable(ContextCompat.getColor(context, if(numColorIds[position] != 0) numColorIds[position] else R.color.colorWhite))
+
         val numtext = view.findViewById<TextView>(R.id.num)
         numtext.text = "${sortedList[position].second}"
-        numtext.background = ColorDrawable(ContextCompat.getColor(context, if(numColorIds[position] != 0) numColorIds[position] else R.color.colorWhite))
 
-        view.findViewById<TextView>(R.id.language).text = sortedList[position].first
         view.findViewById<TextView>(R.id.parcent).text = "${String.format("%3.2f", ((sortedList[position].second * 100).toDouble() / sumOfReps))}%"
         return view
     }
