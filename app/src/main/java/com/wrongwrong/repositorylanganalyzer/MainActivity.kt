@@ -68,8 +68,7 @@ class MainActivity : AppCompatActivity() {
 
                         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "Couldn't find any repositories.\n" +
-                                "The spelling is wrong or the public repository does not exist.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, R.string.faultGettingMessage, Toast.LENGTH_LONG).show()
                     }
                 }catch (e: IOException) {
                     Log.d("onResponse", "IOException")

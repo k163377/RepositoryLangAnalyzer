@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">RepositoryLangAnalyzer</string>
     <string name="inputIdHint">GitHubのIDを入力</string>>
-    <string name="launchButtonText">GET</string>
+    <string name="faultGettingMessage">取得に失敗しました。\nIDが間違っている、もしくは公開されているリポジトリが存在しない可能性があります。</string>
 </resources>
