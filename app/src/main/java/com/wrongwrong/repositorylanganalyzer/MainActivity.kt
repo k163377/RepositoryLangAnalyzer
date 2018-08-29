@@ -63,10 +63,12 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                         listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
-                        repSumText.text = "Find ${repositories!!.count()} repositories."
+                        repSumText.text =
+                                getString(R.string.successMessage)
+                                        .replace("[id]", input.getText().toString())
+                                        .replace("[numOfRepos]", "${repositories!!.count()}")
+                        //repSumText.text = "Find ${repositories!!.count()} repositories."
                         repSumText.visibility = View.VISIBLE
-
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(context, R.string.faultGettingMessage, Toast.LENGTH_LONG).show()
                     }

@@ -2,5 +2,7 @@
     <string name="app_name">RepositoryLangAnalyzer</string>
     <string name="inputIdHint">Input GitHub ID</string>
     <string name="launchButtonText">GET</string>
+
+    <string name="successMessage">[id] has [numOfRepos] repositories.</string>
     <string name="faultGettingMessage">Couldn\'t find any repositories.\nThe spelling is wrong or the public repository does not exist.</string>
 </resources>
