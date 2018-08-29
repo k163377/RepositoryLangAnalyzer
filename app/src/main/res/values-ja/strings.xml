@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">RepositoryLangAnalyzer</string>
     <string name="inputIdHint">GitHubのIDを入力</string>>
+    <string name="launchButtonText">GET</string>
 </resources>
