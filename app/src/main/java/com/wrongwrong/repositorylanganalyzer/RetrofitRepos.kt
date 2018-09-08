@@ -8,6 +8,11 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import java.io.Serializable
 
+val retrofit: Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
+        .baseUrl("https://api.github.com/users/")
+        .build()
+
 data class Owner(
         var login: String,
         var id: Long,
@@ -124,17 +129,12 @@ data class Repo(
         var license: License
 ): Serializable
 
-fun getReposCall(id: String): Call<List<Repo>> {
-    val gson = GsonBuilder().serializeNulls().create()
-    val retrofit: Retrofit = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("https://api.github.com/users/")
-            .build()
-    val service = retrofit.create(IGetRepos::class.java)
-    return service.getRepos(id)
-}
-
-private interface IGetRepos{
+interface IGetRepos{
     @GET("{id}/repos")
     fun getRepos(@Path("id") userID : String) : Call<List<Repo>>
+}
+val service: IGetRepos = retrofit.create(IGetRepos::class.java)
+
+fun getReposCall(id: String): Call<List<Repo>> {
+    return service.getRepos(id)
 }
