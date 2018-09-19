@@ -1,6 +1,8 @@
 package com.wrongwrong.repositorylanganalyzer
 
 import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -8,7 +10,13 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import java.io.Serializable
 
+private val client: OkHttpClient = OkHttpClient
+        .Builder()
+        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .build()
+
 private val retrofit: Retrofit = Retrofit.Builder()
+        .client(client)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
         .baseUrl("https://api.github.com/users/")
         .build()
