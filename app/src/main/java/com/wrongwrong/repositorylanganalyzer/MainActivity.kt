@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.view.View
 import android.widget.*
 import com.wrongwrong.repositorylanganalyzer.GitHubUtil.Companion.makeRankOfLangs
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,16 +20,11 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     var repositories: List<Repo>? = null
-    //パーツ
-    lateinit var launchButton: Button
-    lateinit var listView: ListView
-    lateinit var input: EditText
-    lateinit var repSumText: TextView
 
     private fun setPartsEnabled(b: Boolean){
         this.launchButton.isEnabled = b
         this.listView.isEnabled = b
-        this.input.isEnabled = b
+        this.inputAccount.isEnabled = b
     }
 
     private fun getInformations(){
@@ -43,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
-        reposService.getRepos(input.text.toString()).enqueue(object : Callback<List<Repo>> {
+        reposService.getRepos(inputAccount.text.toString()).enqueue(object : Callback<List<Repo>> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
                 try{
@@ -93,11 +89,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        launchButton = findViewById(R.id.launchButton)
-        listView = findViewById(R.id.listView)
-        input = findViewById(R.id.inputAccount)
-        repSumText = findViewById(R.id.repSumText)
-
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 
         listView.setOnItemClickListener{ parent, _, position, _ ->
@@ -107,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        input.setOnEditorActionListener { v, actionId, keyEvent ->
+        inputAccount.setOnEditorActionListener { _, _, _ ->
             getInformations()
             return@setOnEditorActionListener true
         }
