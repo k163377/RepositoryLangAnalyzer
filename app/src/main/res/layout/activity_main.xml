@@ -17,13 +17,14 @@
             android:inputType="text"
             android:scrollHorizontally="true"
             android:layout_weight="8"
-            tools:ignore="LabelFor" />
+            android:hint="@string/inputIdHint"
+            tools:ignore="LabelFor"/>
 
         <Button
             android:id="@+id/launchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GET"
+            android:text="@string/launchButtonText"
             android:layout_weight="1"
             android:onClick="onClickLaunch"/>
     </LinearLayout>

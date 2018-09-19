@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         this.input.isEnabled = b
     }
 
-    fun onClickLaunch(view: View){
+    private fun getInformations(){
         //キーボードの非表示
         val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
         if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         setPartsEnabled(false)
 
         //処理開始通知のトースト表示
-        Toast.makeText(this, "Start.", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
         val reposCall = getReposCall(input.text.toString()) //データを取得
@@ -63,13 +63,14 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                         listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
-                        repSumText.text = "Find ${repositories!!.count()} repositories."
+                        repSumText.text =
+                                getString(R.string.successMessage)
+                                        .replace("[id]", input.getText().toString())
+                                        .replace("[numOfRepos]", "${repositories!!.count()}")
+                        //repSumText.text = "Find ${repositories!!.count()} repositories."
                         repSumText.visibility = View.VISIBLE
-
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "Couldn't find any repositories.\n" +
-                                "The spelling is wrong or the public repository does not exist.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, R.string.faultGettingMessage, Toast.LENGTH_LONG).show()
                     }
                 }catch (e: IOException) {
                     Log.d("onResponse", "IOException")
@@ -83,6 +84,10 @@ class MainActivity : AppCompatActivity() {
                 setPartsEnabled(true)
             }
         })
+    }
+
+    fun onClickLaunch(view: View){
+        getInformations()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +106,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
             intent.putExtra("repositories", repositories!!.toTypedArray())
             startActivity(intent)
+        }
+
+        input.setOnEditorActionListener { v, actionId, keyEvent ->
+            getInformations()
+            return@setOnEditorActionListener true
         }
     }
 }

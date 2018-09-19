@@ -14,8 +14,13 @@ class GitHubUtil {
             var map = HashMap<String, Int>()
             var temp: String
             for(repo in Repos!!){ //nullチェックは外でやること
-                temp = if(repo.language == null) "OtherLanguage" else repo.language!! //言語にnullを入れたくないので、チェックはここでやる？
-                if(map.contains(temp)) map[temp] = map[temp]!!+1
+                if(null == repo.language){
+                    temp = "OtherLanguage"
+                    repo.language = temp
+                } else {
+                    temp = repo.language!!
+                } //言語にnullを入れたくないので、チェックはここでやる
+                if(map.contains(repo.language)) map[temp] = map[temp]!!+1
                 else map[temp] = 1
             }
             return map.toList().sortedByDescending { pair -> pair.second }
