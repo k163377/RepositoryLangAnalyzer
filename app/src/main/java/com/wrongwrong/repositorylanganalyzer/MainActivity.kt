@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                         listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
                         repSumText.text =
                                 getString(R.string.successMessage)
-                                        .replace("[id]", input.getText().toString())
+                                        .replace("[id]", inputAccount.text.toString())
                                         .replace("[numOfRepos]", "${repositories!!.count()}")
                         //repSumText.text = "Find ${repositories!!.count()} repositories."
                         repSumText.visibility = View.VISIBLE
