@@ -99,7 +99,7 @@ data class Repo(
         val hooks_url: String,
         val svn_url: String,
         val homepage: String,
-        val language: String?,
+        var language: String?,
         val forks_count: Int,
         val stargazers_count: Int,
         val watchers_count: Int,
