@@ -8,11 +8,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import java.io.Serializable
 
-val retrofit: Retrofit = Retrofit.Builder()
+private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
         .baseUrl("https://api.github.com/users/")
         .build()
-
 
 data class Owner(
         val login: String,
