@@ -31,7 +31,7 @@ class LanguageAdapter(val context: Context,
 
     @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = layoutInflater.inflate(R.layout.language_item, parent, false)
+        val view = layoutInflater.inflate(R.layout.item_language, parent, false)
 
         val langText = view.findViewById<TextView>(R.id.language)
         langText.text = sortedList[position].first

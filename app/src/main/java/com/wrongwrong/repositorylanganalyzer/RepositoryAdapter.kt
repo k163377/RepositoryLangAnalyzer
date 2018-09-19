@@ -37,7 +37,7 @@ class RepositoryAdapter (val context: Context,
 
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = layoutInflater.inflate(R.layout.repository_item, parent, false)
+        val view = layoutInflater.inflate(R.layout.item_repository, parent, false)
         val rep_name = view.findViewById<TextView>(R.id.rep_name)
         rep_name.text = selectedRepositories[position].full_name
         rep_name.background = ColorDrawable(ContextCompat.getColor(context, colorId))
