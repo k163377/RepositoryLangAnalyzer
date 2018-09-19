@@ -30,7 +30,7 @@ class RepositoryActivity: AppCompatActivity() {
         title = titleLang
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimaryDark)))
 
-        repository_list.setOnItemClickListener { parent, v, position, id ->
+        repository_list.setOnItemClickListener { parent, _, position, _ ->
             val uri = Uri.parse((parent.getItemAtPosition(position) as Repo).html_url)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
