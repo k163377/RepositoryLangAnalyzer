@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
-        val reposCall = getReposCall(input.text.toString()) //データを取得
-        reposCall.enqueue(object : Callback<List<Repo>> {
+        reposService.getRepos(input.text.toString()).enqueue(object : Callback<List<Repo>> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
                 try{

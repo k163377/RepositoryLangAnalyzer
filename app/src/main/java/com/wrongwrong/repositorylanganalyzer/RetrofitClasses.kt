@@ -129,8 +129,4 @@ interface IGetRepos{
     @GET("{id}/repos")
     fun getRepos(@Path("id") userID : String) : Call<List<Repo>>
 }
-val service: IGetRepos = retrofit.create(IGetRepos::class.java)
-
-fun getReposCall(id: String): Call<List<Repo>> {
-    return service.getRepos(id)
-}
+val reposService: IGetRepos = retrofit.create(IGetRepos::class.java)
