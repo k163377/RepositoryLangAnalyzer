@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     repoArray.addAll(body)
                     //30以上有ればまだ取得しきれていないので再度取得を呼び出す
                     if(body.size == 30) {
-                        getRepos(context, repoArray, offset)
+                        getRepos(context, repoArray, offset + 30L)
                         return
                     }
                 }
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
-        getRepos(context, ArrayList(), 0)
+        getRepos(context, ArrayList(), 0L)
     }
 
     fun onClickLaunch(view: View){
