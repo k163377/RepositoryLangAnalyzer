@@ -8,6 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.io.Serializable
 
 private val client: OkHttpClient = OkHttpClient
@@ -135,6 +136,9 @@ data class Repo(
 
 interface IGetRepos{
     @GET("{id}/repos")
-    fun getRepos(@Path("id") userID : String) : Call<List<Repo>>
+    fun getRepos(@Path("id") userID : String,
+                 @Query("limit") limit: Int,
+                 @Query("offset") offset: Long
+    ) : Call<List<Repo>>
 }
 val reposService: IGetRepos = retrofit.create(IGetRepos::class.java)
