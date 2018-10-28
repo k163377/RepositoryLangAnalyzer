@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.view.View
 import android.widget.*
@@ -16,10 +15,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
-    var repositories: List<Repo>? = null
+    lateinit var repositories: List<Repo>
 
     private fun setPartsEnabled(b: Boolean){
         this.launchButton.isEnabled = b
@@ -27,7 +25,65 @@ class MainActivity : AppCompatActivity() {
         this.inputAccount.isEnabled = b
     }
 
-    private fun getInformations(){
+    //リポジトリを全て獲得してセットまでやる関数
+    private fun getRepos(context: Context,
+                         repoArray: ArrayList<Repo>,
+                         offset: Long
+    ){
+        //取得開始
+        reposService.getRepos(
+                inputAccount.text.toString(),
+                offset
+        ).enqueue(object : Callback<List<Repo>> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
+                val body: List<Repo>? = response!!.body()
+                //結果が何も無かったならメッセージを出して終了
+                if(body == null || (body.isEmpty() && repoArray.size == 0)){
+                    Toast.makeText(context, R.string.faultGettingMessage, Toast.LENGTH_LONG).show()
+                    setPartsEnabled(true)
+                    return
+                } else if(body.isNotEmpty()){ //リポジトリが空でなければ追加
+                    repoArray.addAll(body)
+                    //30以上有ればまだ取得しきれていないので再度取得を呼び出す
+                    if(body.size == 30) {
+                        getRepos(context, repoArray, offset)
+                        return
+                    }
+                }
+                //後処理、リストに入れる
+                val rankOfLangs = makeRankOfLangs(repoArray)
+                val numColors = ArrayList<Int>()
+                for(p in rankOfLangs){
+                    numColors.add(
+                            resources.getIdentifier(
+                                    p.first.replace(' ', '_')
+                                            .replace('+', '_').replace('#', '_')
+                                            .replace('-', '_').replace('\'', '_'),
+                                    "color", packageName
+                            )
+                    )
+                }
+                listView.adapter = LanguageAdapter(context, rankOfLangs, repoArray.size, numColors)
+                repSumText.text =
+                        getString(R.string.successMessage)
+                                .replace("[id]", inputAccount.text.toString())
+                                .replace("[numOfRepos]", "${repoArray.size}")
+                //repSumText.text = "Find ${repositories!!.count()} repositories."
+                repSumText.visibility = View.VISIBLE
+
+                repositories = repoArray.toList()
+                setPartsEnabled(true)
+            }
+
+            override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
+                Toast.makeText(context, "Network communication failed.\nPlease check the communication status.", Toast.LENGTH_LONG).show()
+                setPartsEnabled(true)
+            }
+        })
+    }
+
+    private fun getInformation(){
         //キーボードの非表示
         val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
         if (imm.isActive) imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
@@ -39,50 +95,11 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
-        reposService.getRepos(inputAccount.text.toString()).enqueue(object : Callback<List<Repo>> {
-            @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
-                try{
-                    repositories = response!!.body()
-                    if(repositories != null && repositories!!.isNotEmpty()){
-                        val rankOfLangs = makeRankOfLangs(repositories)
-                        val numColors = ArrayList<Int>()
-                        for(p in rankOfLangs){
-                            numColors.add(
-                                    resources.getIdentifier(
-                                            p.first.replace(' ', '_')
-                                                    .replace('+', '_').replace('#', '_')
-                                                    .replace('-', '_').replace('\'', '_'),
-                                            "color", packageName
-                                    )
-                            )
-                        }
-                        listView.adapter = LanguageAdapter(context, rankOfLangs, repositories!!.count(), numColors)
-                        repSumText.text =
-                                getString(R.string.successMessage)
-                                        .replace("[id]", inputAccount.text.toString())
-                                        .replace("[numOfRepos]", "${repositories!!.count()}")
-                        //repSumText.text = "Find ${repositories!!.count()} repositories."
-                        repSumText.visibility = View.VISIBLE
-                    } else {
-                        Toast.makeText(context, R.string.faultGettingMessage, Toast.LENGTH_LONG).show()
-                    }
-                }catch (e: IOException) {
-                    Log.d("onResponse", "IOException")
-                }finally {
-                    setPartsEnabled(true)
-                }
-            }
-
-            override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
-                Toast.makeText(context, "Network communication failed.\nPlease check the communication status.", Toast.LENGTH_LONG).show()
-                setPartsEnabled(true)
-            }
-        })
+        getRepos(context, ArrayList(), 0)
     }
 
     fun onClickLaunch(view: View){
-        getInformations()
+        getInformation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,12 +111,12 @@ class MainActivity : AppCompatActivity() {
         listView.setOnItemClickListener{ parent, _, position, _ ->
             val intent = Intent(this.applicationContext, RepositoryActivity::class.java)
             intent.putExtra("language", (parent.getItemAtPosition(position) as Pair<String, Int>).first)
-            intent.putExtra("repositories", repositories!!.toTypedArray())
+            intent.putExtra("repositories", repositories.toTypedArray())
             startActivity(intent)
         }
 
         inputAccount.setOnEditorActionListener { _, _, _ ->
-            getInformations()
+            getInformation()
             return@setOnEditorActionListener true
         }
     }
