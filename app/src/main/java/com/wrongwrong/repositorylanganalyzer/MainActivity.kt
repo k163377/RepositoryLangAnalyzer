@@ -28,12 +28,11 @@ class MainActivity : AppCompatActivity() {
     //リポジトリを全て獲得してセットまでやる関数
     private fun getRepos(context: Context,
                          repoArray: ArrayList<Repo>,
-                         offset: Long
+                         page: Int
     ){
         //取得開始
         reposService.getRepos(
-                inputAccount.text.toString(),
-                offset
+                inputAccount.text.toString(), page
         ).enqueue(object : Callback<List<Repo>> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
@@ -43,17 +42,22 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(context, R.string.faultGettingMessage, Toast.LENGTH_LONG).show()
                     setPartsEnabled(true)
                     return
-                } else if(body.isNotEmpty()){ //リポジトリが空でなければ追加
+                }
+
+                //リポジトリが空でなければ追加
+                if(body.isNotEmpty()){
                     repoArray.addAll(body)
-                    //30以上有ればまだ取得しきれていないので再度取得を呼び出す
-                    if(body.size == 30) {
-                        getRepos(context, repoArray, offset + 30L)
+                    //30以上有ればまだ取得しきれていない可能性がある
+                    if(body.size == 100) {
+                        getRepos(context, repoArray, page+1)
                         return
                     }
                 }
+
                 //後処理、リストに入れる
                 val rankOfLangs = makeRankOfLangs(repoArray)
                 val numColors = ArrayList<Int>()
+                //取得したままだと都合が悪い文字列が有るので、変換
                 for(p in rankOfLangs){
                     numColors.add(
                             resources.getIdentifier(
@@ -64,16 +68,18 @@ class MainActivity : AppCompatActivity() {
                             )
                     )
                 }
+                //アダプタにセット
                 listView.adapter = LanguageAdapter(context, rankOfLangs, repoArray.size, numColors)
+
+                //取得結果のテキストをセット
                 repSumText.text =
                         getString(R.string.successMessage)
                                 .replace("[id]", inputAccount.text.toString())
                                 .replace("[numOfRepos]", "${repoArray.size}")
-                //repSumText.text = "Find ${repositories!!.count()} repositories."
                 repSumText.visibility = View.VISIBLE
 
-                repositories = repoArray.toList()
-                setPartsEnabled(true)
+                repositories = repoArray.toList() //取得したリポジトリ全体は保存
+                setPartsEnabled(true) //UIのロックを解除し終了
             }
 
             override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
@@ -83,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    //ロックした上でデータ取得を開始する、2箇所から呼び出すので関数化
     private fun getInformation(){
         //キーボードの非表示
         val imm = (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -95,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.startMessage), Toast.LENGTH_LONG).show()
         val context = this
 
-        getRepos(context, ArrayList(), 0L)
+        getRepos(context, ArrayList(), 1)
     }
 
     fun onClickLaunch(view: View){
