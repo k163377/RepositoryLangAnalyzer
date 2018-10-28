@@ -137,8 +137,8 @@ data class Repo(
 interface IGetRepos{
     @GET("{id}/repos")
     fun getRepos(@Path("id") userID : String,
-                 @Query("offset") offset: Long,
-                 @Query("limit") limit: Int = 30
+                 @Query("page") page: Int,
+                 @Query("per_page") perPage: Int = 100
     ) : Call<List<Repo>>
 }
 val reposService: IGetRepos = retrofit.create(IGetRepos::class.java)
